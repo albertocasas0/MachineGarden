@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell($word = New-Object -ComObject Word.Application; $word.Visible = $false; $doc = $word.Documents.Open\\(\"D:\\\\Tito\\\\JArdineria\\\\Especificacion_Tecnica_App_Jardin_Ground.docx\"\\); $text = $doc.Content.Text; $doc.Close\\(\\); $word.Quit\\(\\); [System.IO.File]::WriteAllText\\(\"D:\\\\Tito\\\\JArdineria\\\\Especificacion_Tecnica_App_Jardin_Ground.txt\", $text, [System.Text.Encoding]::UTF8\\); Write-Host \"OK - Longitud:\" $text.Length)",
+      "Bash(npm install *)",
+      "Bash(npx prisma *)",
+      "Bash(node prisma/seed.js)",
+      "Bash(node prisma/_check.js)",
+      "Bash(node src/server.js)",
+      "Bash(curl -s http://localhost:4000/api/health)",
+      "Bash(node _check_permisos.js)",
+      "Bash(cd *)",
+      "Bash(dir D:\\\\Tito\\\\JArdineria *)",
+      "Bash(dir *)",
+      "Bash(npm --version)",
+      "Bash(npm run *)",
+      "Bash(curl *)",
+      "Bash(TOKEN=$\\(curl -s -X POST http://localhost:4000/api/auth/login -H \"Content-Type: application/json\" -d '{\"username\":\"alberto-casas\",\"password\":\"celestial\"}' | python -c \"import sys,json;print\\(json.load\\(sys.stdin\\)['token']\\)\"\\); curl -s \"http://localhost:4000/api/forms\" -H \"Authorization: Bearer $TOKEN\" | python -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\('count:',len\\(d\\),'preguntas sample:',d[0]['preguntas'][0] if d and d[0].get\\('preguntas'\\) else 'NO preguntas'\\)\")",
+      "Bash(winget install *)",
+      "PowerShell(Test-NetConnection *)",
+      "PowerShell(nslookup *)",
+      "PowerShell(Resolve-DnsName *)"
+    ]
+  }
+}

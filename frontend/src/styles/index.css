@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Sección 2.3 — base mínima 14px, trazo limpio. */
+html, body, #root { height: 100%; }
+body { font-size: 14px; }
+
+/* Truncado a 2 renglones para celdas de tabla (Nota 4). */
+.cell-clip {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Botones grandes pensados para uso en campo con guantes (sección 7.8.2). */
+.btn-tap { min-height: 44px; min-width: 44px; }
+
+/* Asegura scroll horizontal en tablas responsive sin romper el layout. */
+.table-wrap { overflow-x: auto; }

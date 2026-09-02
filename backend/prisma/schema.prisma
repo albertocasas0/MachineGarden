@@ -1,0 +1,139 @@
+// Schema Prisma - App Jardín Ground
+// Basado en sección 6 del documento de especificación técnica.
+// v1 usa SQLite para ejecución local sin infraestructura. Migrar a Postgres
+// cambiando el `provider` a "postgresql" y ajustando tipos si hace falta.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============ VALORES CONTROLADOS (SQLite no soporta enums en Prisma) ============
+// Rol:           'Tecnico' | 'Supervisor' | 'Administrador'
+// TipoDato:      'BOOLEAN' | 'STRING' | 'INT'
+// OrigenImagen:  'GALERIA' | 'CAMARA'
+// La validación se hace en el backend (utils/enums.js).
+
+// ============ 6.1 Personal (usuario del sistema) ============
+model Personal {
+  id             Int       @id @default(autoincrement())
+  nombre         String
+  apellido       String
+  // Para login se usa nombre+apellido concatenado como username interno
+  // (ver ⚠ sección 6.1). Guardamos el dato crudo para mostrar; el username
+  // se deriva en código.
+  username       String    @unique
+  rol            String
+  contrasenaHash String    @map("contrasena_hash")
+  activo         Boolean   @default(true)
+  fechaCreacion  DateTime  @default(now()) @map("fecha_creacion")
+
+  registros      Registro[]
+
+  @@map("personal")
+}
+
+// ============ 6.2 TipoMaquina ============
+model TipoMaquina {
+  id            Int       @id @default(autoincrement())
+  nombre        String    @unique
+  activo        Boolean   @default(true)
+  fechaCreacion DateTime  @default(now()) @map("fecha_creacion")
+
+  forms         Form[]
+
+  @@map("tipo_maquina")
+}
+
+// ============ 6.3 Form (plantilla) y Pregunta ============
+// Relación 1 a 1 con TipoMaquina (ver ⚠ sección 6.3).
+model Form {
+  id            Int       @id @default(autoincrement())
+  tipoMaquinaId Int       @unique @map("tipo_maquina_id")
+  nombre        String
+  activo        Boolean   @default(true)
+  fechaCreacion DateTime  @default(now()) @map("fecha_creacion")
+
+  tipoMaquina   TipoMaquina @relation(fields: [tipoMaquinaId], references: [id])
+  preguntas     Pregunta[]
+  equipos       Equipo[]
+
+  @@map("form")
+}
+
+model Pregunta {
+  id          Int       @id @default(autoincrement())
+  formId      Int       @map("form_id")
+  texto       String
+  tipoDato    String    @map("tipo_dato")
+  orden       Int
+  obligatoria Boolean   @default(true)
+
+  form        Form     @relation(fields: [formId], references: [id])
+  respuestas  Respuesta[]
+
+  @@map("pregunta")
+}
+
+// ============ 6.4 Equipo (máquina física) ============
+model Equipo {
+  id            Int       @id @default(autoincrement())
+  nombre        String
+  formId        Int       @map("form_id")
+  // Token aleatorio único, base URL del QR (sección 9).
+  qrToken       String    @unique @map("qr_token")
+  activo        Boolean   @default(true)
+  fechaCreacion DateTime  @default(now()) @map("fecha_creacion")
+
+  form          Form     @relation(fields: [formId], references: [id])
+  registros     Registro[]
+
+  @@map("equipo")
+}
+
+// ============ 6.5 Registro ============
+model Registro {
+  id         Int       @id @default(autoincrement())
+  equipoId   Int       @map("equipo_id")
+  personalId Int       @map("personal_id")
+  fechaHora  DateTime  @default(now()) @map("fecha_hora")
+
+  equipo     Equipo    @relation(fields: [equipoId], references: [id])
+  personal   Personal  @relation(fields: [personalId], references: [id])
+  respuestas Respuesta[]
+  imagenes   ImagenAdjunta[]
+
+  @@map("registro")
+}
+
+// ============ 6.6 Respuesta ============
+model Respuesta {
+  id          Int       @id @default(autoincrement())
+  registroId  Int       @map("registro_id")
+  preguntaId  Int       @map("pregunta_id")
+  valorBoolean Boolean? @map("valor_boolean")
+  valorTexto   String?  @map("valor_texto")
+  valorNumero  Int?     @map("valor_numero")
+
+  registro    Registro @relation(fields: [registroId], references: [id])
+  pregunta    Pregunta @relation(fields: [preguntaId], references: [id])
+
+  @@map("respuesta")
+}
+
+// ============ 6.7 ImagenAdjunta ============
+model ImagenAdjunta {
+  id         Int          @id @default(autoincrement())
+  registroId Int          @map("registro_id")
+  url        String
+  origen     String
+  fechaCarga DateTime     @default(now()) @map("fecha_carga")
+
+  registro   Registro @relation(fields: [registroId], references: [id])
+
+  @@map("imagen_adjunta")
+}
