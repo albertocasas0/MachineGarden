@@ -9,13 +9,15 @@ export const tokenStore = {
   clear: () => localStorage.removeItem(TOKEN_KEY),
 };
 
+const API_URL = 'https://machinegarden-api.onrender.com';
+
 export async function api(path, { method = 'GET', body, headers = {}, raw = false, isForm = false } = {}) {
   const token = tokenStore.get();
   const h = { ...headers };
   if (!isForm) h['Content-Type'] = 'application/json';
   if (token) h['Authorization'] = `Bearer ${token}`;
 
-  const res = await fetch(`/api${path}`, {
+  const res = await fetch(`${API_URL}/api${path}`, {
     method,
     headers: h,
     body: isForm ? body : (body !== undefined ? JSON.stringify(body) : undefined),
