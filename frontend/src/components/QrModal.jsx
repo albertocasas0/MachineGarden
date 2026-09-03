@@ -43,7 +43,7 @@ export default function QrModal({ equipo, onClose, onRegenerado }) {
           // Fallback: pedimos el PNG al backend (sección 9).
           try {
             const token = localStorage.getItem('jg_token') || '';
-            const r = await fetch(`/api/equipos/${equipo.id}/qr?format=png`, {
+            const r = await fetch(`https://machinegarden-api.onrender.com/api/equipos/${equipo.id}/qr?format=png`, {
               headers: token ? { Authorization: `Bearer ${token}` } : {},
             });
             if (r.ok) {
