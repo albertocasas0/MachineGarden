@@ -10,13 +10,16 @@ import EquiposPage from './pages/EquiposPage.jsx';
 import PersonalPage from './pages/PersonalPage.jsx';
 import ReportesPage from './pages/ReportesPage.jsx';
 import RelevarPage from './pages/RelevarPage.jsx';
+import RelevarInstruccionPage from './pages/RelevarInstruccionPage.jsx';
 
 export default function App() {
   return (
     <Routes>
       {/* Login y wizard de carga son las únicas rutas accesibles sin sesión. */}
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/relevar/instruccion" element={<RelevarInstruccionPage />} />
       <Route path="/relevar/:token" element={<RelevarPage />} />
+
 
       {/* Resto requiere sesión. */}
       <Route path="/inicio"   element={<RequireAuth roles={['Supervisor', 'Administrador']}><InicioPage /></RequireAuth>} />

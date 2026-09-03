@@ -1,11 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Tractor, ClipboardList, Truck, Users, FileText } from 'lucide-react';
+import { Tractor, ClipboardList, Truck, Users, FileText, QrCode } from 'lucide-react';
 import DashboardLayout from '../components/DashboardLayout.jsx';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
 // Sección 7.2: cards de acceso a cada módulo.
 const CARDS = [
+  { to: '/relevar/instruccion', label: 'Scanner', Icon: QrCode,       desc: 'Escanear QR de máquina.' },
   { to: '/maquinas', label: 'Máquina',    Icon: Tractor,       desc: 'Tipos de máquina (categorías).' },
   { to: '/forms',    label: 'Form',       Icon: ClipboardList, desc: 'Plantillas de preguntas.' },
   { to: '/equipos',  label: 'Equipo',     Icon: Truck,         desc: 'Máquinas físicas + QR.' },

@@ -24,14 +24,15 @@ export async function generarQr(req, res) {
     }
     return res.send(svg);
   }
-  // png por defecto.
+
+  // PNG por defecto. Usamos res.end() para enviar el buffer binario sin interferencias de Express.
   const buf = await QRCode.toBuffer(url, { type: 'png', margin: 2, width: 512 });
   res.setHeader('Content-Type', 'image/png');
   if (req.query.download) {
     res.setHeader('Content-Disposition',
       `attachment; filename="qr-${eq.nombre.replace(/\s+/g, '_')}.png"`);
   }
-  return res.send(buf);
+  return res.end(buf);
 }
 
 // GET /api/equipos/:id/qr-link   devuelve la URL codificada en el QR.
