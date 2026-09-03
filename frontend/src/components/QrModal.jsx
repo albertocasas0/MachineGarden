@@ -3,7 +3,7 @@ import QRCode from 'qrcode';
 import { Download, Printer, Share2, RefreshCw, QrCode as QrIcon } from 'lucide-react';
 import Modal from './Modal.jsx';
 import Button from './Button.jsx';
-import { api } from '../services/api.js';
+import { api, API_URL } from '../services/api.js';
 import { useUI } from '../contexts/UIContext.jsx';
 
 // Modal de QR (sección 9): generar, descargar PNG, imprimir, compartir y regenerar.
@@ -43,7 +43,7 @@ export default function QrModal({ equipo, onClose, onRegenerado }) {
           // Fallback: pedimos el PNG al backend (sección 9).
           try {
             const token = localStorage.getItem('jg_token') || '';
-            const r = await fetch(`https://machinegarden-api.onrender.com/api/equipos/${equipo.id}/qr?format=png`, {
+            const r = await fetch(`${API_URL}/api/equipos/${equipo.id}/qr?format=png`, {
               headers: token ? { Authorization: `Bearer ${token}` } : {},
             });
             if (r.ok) {

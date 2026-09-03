@@ -2,14 +2,13 @@
 // El proxy de Vite redirige /api -> http://localhost:4000 (vite.config.js).
 
 const TOKEN_KEY = 'jg_token';
+export const API_URL = 'https://machinegarden-api.onrender.com';
 
 export const tokenStore = {
   get: () => localStorage.getItem(TOKEN_KEY),
   set: (t) => localStorage.setItem(TOKEN_KEY, t),
   clear: () => localStorage.removeItem(TOKEN_KEY),
 };
-
-const API_URL = 'https://machinegarden-api.onrender.com';
 
 export async function api(path, { method = 'GET', body, headers = {}, raw = false, isForm = false } = {}) {
   const token = tokenStore.get();
