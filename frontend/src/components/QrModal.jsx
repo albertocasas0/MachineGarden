@@ -21,6 +21,7 @@ export default function QrModal({ equipo, onClose, onRegenerado }) {
     async function load() {
       try {
         const { url } = await api(`/equipos/${equipo.id}/qr-link`);
+        console.log("QR URL:", url);
         if (cancel) return;
         setQrUrl(url);
         // Dibuja en el canvas. Si falla (canvas nulo, etc.) seguimos: los
